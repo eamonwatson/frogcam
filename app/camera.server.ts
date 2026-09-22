@@ -6,7 +6,7 @@ let latest: string | null = null;
 function fetchFrame(): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     https
-      .get(`https://${process.env.PHONE_SENSE}:8080/camera`, { rejectUnauthorized: false }, (res) => {
+      .get(`https://${process.env.FROGPHONE}:8080/camera`, { rejectUnauthorized: false }, (res) => {
         const chunks: Buffer[] = [];
         res.on("data", (chunk) => chunks.push(chunk));
         res.on("end", () => resolve(Buffer.concat(chunks)));
@@ -20,7 +20,7 @@ async function refresh() {
     const buffer = await fetchFrame();
     latest = `data:image/jpeg;base64,${buffer.toString("base64")}`;
   } catch (error) {
-    console.error("phonesense camera fetch failed:", error);
+    console.error("frogphone camera fetch failed:", error);
   }
 }
 
