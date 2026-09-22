@@ -1,4 +1,8 @@
-<h1 align="center">FrogCam</h1>
+<div align="center">
+  <img src="public/frogcam.svg" width="120" alt="FrogCam logo" />
+
+  # FrogCam
+</div>
 
 ## About
 
