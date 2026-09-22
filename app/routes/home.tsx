@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useRevalidator } from "react-router";
 import type { Route } from "./+types/home";
 import { getLatestFrame } from "../camera.server";
+import { version } from "../../package.json";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -25,7 +26,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   if (!loaderData.image) return null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center">
       <table
         bgColor="#DDDDDD"
         cellPadding={0}
@@ -44,6 +45,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </tr>
         </tbody>
       </table>
+      <p className="caption">version {version}</p>
     </div>
   );
 }
