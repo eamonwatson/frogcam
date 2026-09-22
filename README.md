@@ -1,6 +1,4 @@
-<div align="center">
-  # FrogCam
-</div>
+<h1 align="center">FrogCam</h1>
 
 ## About
 
