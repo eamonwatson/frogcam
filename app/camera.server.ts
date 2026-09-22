@@ -1,4 +1,5 @@
 import https from "node:https";
+const REFRESH = process.env.REFRESH_TIME ? Number(process.env.REFRESH_TIME) * 1000 : 20_000;
 
 let latest: string | null = null;
 
@@ -24,7 +25,7 @@ async function refresh() {
 }
 
 refresh();
-const interval = setInterval(refresh, 20_000);
+const interval = setInterval(refresh, REFRESH);
 
 if (import.meta.hot) {
   import.meta.hot.dispose(() => clearInterval(interval));
