@@ -12,16 +12,16 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export function loader() {
-  return { image: getLatestFrame(), catalog: process.env.CATALOG === "true" };
+  return { ...getLatestFrame(), catalog: process.env.CATALOG === "true" };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const revalidator = useRevalidator();
 
   useEffect(() => {
-    const interval = setInterval(() => revalidator.revalidate(), 20_000);
-    return () => clearInterval(interval);
-  }, [revalidator]);
+    const timeout = setTimeout(() => revalidator.revalidate(), loaderData.next);
+    return () => clearTimeout(timeout);
+  }, [loaderData, revalidator]);
 
   if (!loaderData.image) return null;
 

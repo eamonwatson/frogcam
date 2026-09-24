@@ -6,7 +6,10 @@ const REFRESH = process.env.REFRESH_TIME ? Number(process.env.REFRESH_TIME) * 10
 const CATALOG = process.env.CATALOG === "true";
 const CATALOG_DIR = path.resolve(process.env.CATALOG_STORAGE || "catalog");
 
-const state: { latest: string | null; interval?: NodeJS.Timeout } = ((globalThis as any).frogcam ??= { latest: null });
+const state: { latest: string | null; updated: number; interval?: NodeJS.Timeout } = ((globalThis as any).frogcam ??= {
+  latest: null,
+  updated: 0,
+});
 clearInterval(state.interval);
 
 function fetchFrame(): Promise<Buffer> {
@@ -25,6 +28,7 @@ async function refresh() {
   try {
     const buffer = await fetchFrame();
     state.latest = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+    state.updated = Date.now();
     if (CATALOG) await store(buffer);
   } catch (error) {
     console.error("frogphone camera fetch failed:", error);
@@ -44,7 +48,7 @@ if (!state.latest) refresh();
 state.interval = setInterval(refresh, REFRESH);
 
 export function getLatestFrame() {
-  return state.latest;
+  return { image: state.latest, next: REFRESH - ((Date.now() - state.updated) % REFRESH) + 1000 };
 }
 
 export async function getCatalogFrames() {
