@@ -27,3 +27,15 @@ body {
   border-width: 1px;
   border-style: inset;
 }
+
+.frogcam-button {
+  display: inline-block;
+  background: #dddddd;
+  border: 2px outset #dddddd;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.frogcam-button:active {
+  border-style: inset;
+}

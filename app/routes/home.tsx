@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useRevalidator } from "react-router";
+import { Link, useRevalidator } from "react-router";
 import type { Route } from "./+types/home";
 import { getLatestFrame } from "../camera.server";
 import { version } from "../../package.json";
@@ -12,7 +12,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export function loader() {
-  return { image: getLatestFrame() };
+  return { image: getLatestFrame(), catalog: process.env.CATALOG === "true" };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
@@ -46,6 +46,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </tbody>
       </table>
       <p className="caption">version {version}</p>
+      {loaderData.catalog && <Link to="/catalog" className="caption frogcam-button">Catalog</Link>}
     </div>
   );
 }
