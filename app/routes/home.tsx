@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useRevalidator } from "react-router";
 import type { Route } from "./+types/home";
 import { getLatestFrame } from "../camera.server";
@@ -17,10 +17,17 @@ export function loader() {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const revalidator = useRevalidator();
+  const [refresh, setRefresh] = useState(Math.ceil(loaderData.next / 1000));
 
   useEffect(() => {
+    const end = Date.now() + loaderData.next;
+    setRefresh(Math.ceil(loaderData.next / 1000));
     const timeout = setTimeout(() => revalidator.revalidate(), loaderData.next);
-    return () => clearTimeout(timeout);
+    const countdown = setInterval(() => setRefresh(Math.max(0, Math.ceil((end - Date.now()) / 1000))), 1000);
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(countdown);
+    };
   }, [loaderData, revalidator]);
 
   if (!loaderData.image) return null;
@@ -41,7 +48,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </td>
           </tr>
           <tr className="caption">
-            <td>FrogCam</td>
+            <td>FrogCam - Refreshes in {refresh}s</td>
           </tr>
         </tbody>
       </table>
