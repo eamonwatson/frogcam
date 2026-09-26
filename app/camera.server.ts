@@ -11,6 +11,7 @@ const state: { latest: string | null; updated: number; interval?: NodeJS.Timeout
   updated: 0,
 });
 clearInterval(state.interval);
+let frames = 0;
 
 function fetchFrame(): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -29,7 +30,7 @@ async function refresh() {
     const buffer = await fetchFrame();
     state.latest = `data:image/jpeg;base64,${buffer.toString("base64")}`;
     state.updated = Date.now();
-    if (CATALOG) await store(buffer);
+    if (CATALOG && frames++ % 3 === 0) await store(buffer);
   } catch (error) {
     console.error("frogphone camera fetch failed:", error);
   }
