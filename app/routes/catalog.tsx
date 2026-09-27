@@ -32,7 +32,15 @@ export default function Catalog({ loaderData }: Route.ComponentProps) {
           />
         ))}
       </div>
-      <Link to="/" className="caption frogcam-button mt-2">Back</Link>
+      <div className="flex flex-row gap-2">
+        <Link to="/" className="caption frogcam-button mt-2">Back</Link>
+        <button
+          className="caption frogcam-button mt-2"
+          onClick={() => setExpanded(loaderData.frames[Math.floor(Math.random() * loaderData.frames.length)] ?? null)}
+         >
+          Random
+        </button>
+      </div>
       {expanded && (
         <div className="fixed inset-0 flex items-center justify-center bg-black" onClick={() => setExpanded(null)}>
           <img src={`/catalog/${expanded}`} className="max-w-full max-h-full" />
